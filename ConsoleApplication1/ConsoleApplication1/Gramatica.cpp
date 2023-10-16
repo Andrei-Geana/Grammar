@@ -10,6 +10,20 @@ Gramatica::Gramatica()
 {
 }
 
+void Gramatica::stringToSet(const std::string& sir_caractere, const bool& inVn)
+{
+	if (inVn)
+		for (int index = 0; index < sir_caractere.size(); index += 2)
+		{
+			m_Vn.push_back(sir_caractere[index]);
+		}
+	else
+		for (int index = 0; index < sir_caractere.size(); index += 2)
+		{
+			m_Vt.push_back(sir_caractere[index]);
+		}
+}
+
 void Gramatica::setStartCharacter(const char& caracterInceput)
 {
 	m_caracterStart.erase();
@@ -34,20 +48,6 @@ std::string Gramatica::getCuvant() const
 		aplicare_productie(indice_productie_posibila[indice_random], sir_modificat);
 	} while (!indice_productie_posibila.empty());
 	return sir_modificat;
-}
-
-void Gramatica::stringToSet(const std::string& sir_caractere, const bool& inVn)
-{
-	if(inVn)
-		for (int index=0;index<sir_caractere.size();index+=2)
-		{
-			m_Vn.push_back(sir_caractere[index]);
-		}
-	else
-		for (int index = 0; index < sir_caractere.size(); index += 2)
-		{
-			m_Vt.push_back(sir_caractere[index]);
-		}
 }
 
 uint16_t Gramatica::get_indice_random(const uint16_t& maxim) const

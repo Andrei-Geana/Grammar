@@ -128,6 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
+    <ClCompile Include="Gramatica.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Gramatica.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="intrare.prodb" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

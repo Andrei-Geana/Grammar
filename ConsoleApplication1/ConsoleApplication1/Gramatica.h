@@ -1,12 +1,10 @@
 #pragma once
-#include <iostream>
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
-#include <regex>
-#include <fstream>
 #include "Productie.h"
+#include <iostream>
+#include <string>
+#include <fstream>
 #include <random>
+
 class Gramatica
 {
 public:
@@ -26,8 +24,8 @@ private:
 	std::string m_caracterStart;
 	std::vector<Productie> m_productie;
 
-	void stringToSet(const std::string&, const bool&);
-	uint16_t get_indice_random(const uint16_t&) const;
-	void aplicare_productie(const uint16_t&, std::string&) const;
-	void afisare_productie(const uint16_t&, const std::string&) const;
+	void stringToVector(const std::string&, const bool&);
+	uint16_t getIndiceRandom(const uint16_t&) const;
+	void aplicareProductie(const uint16_t&, std::string&) const;
+	void afisareProductie(const uint16_t&, const std::string&) const;
 };

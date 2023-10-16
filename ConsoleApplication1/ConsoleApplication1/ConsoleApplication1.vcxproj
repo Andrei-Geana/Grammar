@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="Gramatica.cpp" />
+    <ClCompile Include="Productie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gramatica.h" />
+    <ClInclude Include="Productie.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="intrare.prodb" />

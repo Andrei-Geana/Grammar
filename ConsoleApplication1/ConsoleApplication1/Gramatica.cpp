@@ -1,7 +1,7 @@
 #include "Gramatica.h"
 
-Gramatica::Gramatica(const std::unordered_set<char>& Vn, const std::unordered_set<char>& Vt, const std::string& caracterStart, 
-	const std::unordered_map<std::string, std::string>& productie) : 
+Gramatica::Gramatica(const std::vector<char>& Vn, const std::vector<char>& Vt, const std::string& caracterStart,
+	const std::vector<Productie>& productie) : 
 	m_Vn{ Vn }, m_Vt{ Vt }, m_caracterStart{ caracterStart }, m_productie{productie}
 {
 }
@@ -15,12 +15,12 @@ void Gramatica::stringToSet(const std::string& sir_caractere, const bool& inVn)
 	if(inVn)
 		for (int index=0;index<sir_caractere.size();index+=2)
 		{
-			m_Vn.insert(sir_caractere[index]);
+			m_Vn.push_back(sir_caractere[index]);
 		}
 	else
 		for (int index = 0; index < sir_caractere.size(); index += 2)
 		{
-			m_Vt.insert(sir_caractere[index]);
+			m_Vt.push_back(sir_caractere[index]);
 		}
 }
 
@@ -37,7 +37,7 @@ std::istream& operator>>(std::istream& in, Gramatica& gramatica)
 	while (!in.eof())
 	{
 		in >> stanga >> dreapta;
-		gramatica.m_productie[stanga] = dreapta;
+		gramatica.m_productie.push_back({ stanga,dreapta });
 		stanga.clear(); dreapta.clear();
 	}
 	return in;
@@ -49,13 +49,13 @@ std::ostream& operator<<(std::ostream& out, const Gramatica& gramatica)
 	out << "Vn = { ";
 	for (const auto& element : gramatica.m_Vn)
 		out << element << " ";
-	out << "\nVt = { ";
+	out << "}\nVt = { ";
 	for (const auto& element : gramatica.m_Vt)
 		out << element << " ";
-	out << "\nCaracter start: " << gramatica.m_caracterStart;
+	out << "}\nCaracter start: " << gramatica.m_caracterStart;
 	out << "\nProductii:\n";
 	for (const auto& productie : gramatica.m_productie)
-		out << productie.first << " -> " << productie.second << "\n";
+		out << productie.m_stanga << " -> " << productie.m_dreapta<< "\n";
 	out << "\n";
 	return out;
 }

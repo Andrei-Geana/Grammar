@@ -21,9 +21,15 @@
     <ClCompile Include="Gramatica.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Productie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gramatica.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Productie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

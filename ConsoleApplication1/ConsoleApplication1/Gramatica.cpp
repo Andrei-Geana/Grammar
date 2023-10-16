@@ -10,6 +10,32 @@ Gramatica::Gramatica()
 {
 }
 
+void Gramatica::setStartCharacter(const char& caracterInceput)
+{
+	m_caracterStart.erase();
+	m_caracterStart.push_back(caracterInceput);
+}
+
+std::string Gramatica::getCuvant() const
+{
+	std::string sir_modificat = m_caracterStart;
+	std::vector<uint16_t> indice_productie_posibila;
+	do
+	{
+		indice_productie_posibila.clear();
+		for (uint16_t index=0; index<m_productie.size(); index++)
+		{
+			if (sir_modificat.find(m_productie[index].m_stanga) != std::string::npos)
+				indice_productie_posibila.push_back(index);
+		}
+		if (indice_productie_posibila.empty())
+			break;
+		uint16_t indice_random = get_indice_random(indice_productie_posibila.size()-1);
+		aplicare_productie(indice_productie_posibila[indice_random], sir_modificat);
+	} while (!indice_productie_posibila.empty());
+	return sir_modificat;
+}
+
 void Gramatica::stringToSet(const std::string& sir_caractere, const bool& inVn)
 {
 	if(inVn)
@@ -22,6 +48,27 @@ void Gramatica::stringToSet(const std::string& sir_caractere, const bool& inVn)
 		{
 			m_Vt.push_back(sir_caractere[index]);
 		}
+}
+
+uint16_t Gramatica::get_indice_random(const uint16_t& maxim) const
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(0, maxim);
+	return distrib(gen);
+}
+
+void Gramatica::aplicare_productie(const uint16_t& index_productie, std::string& cuvant_modificat) const
+{
+	afisare_productie(index_productie, cuvant_modificat);
+	cuvant_modificat.replace(cuvant_modificat.find(m_productie[index_productie].m_stanga),
+		m_productie[index_productie].m_stanga.size(), m_productie[index_productie].m_dreapta);
+}
+
+void Gramatica::afisare_productie(const uint16_t& index_productie, const std::string& cuvant_modificat) const
+{
+	std::cout << "CUVANT CURENT: " << cuvant_modificat << "\n";
+	std::cout << "SE APLICA " << m_productie[index_productie].m_stanga << " -> " << m_productie[index_productie].m_dreapta << "\n\n";
 }
 
 std::istream& operator>>(std::istream& in, Gramatica& gramatica)
@@ -45,7 +92,7 @@ std::istream& operator>>(std::istream& in, Gramatica& gramatica)
 
 std::ostream& operator<<(std::ostream& out, const Gramatica& gramatica)
 {
-	out << "\nGRAMATICA:\n";
+	out << "GRAMATICA:\n";
 	out << "Vn = { ";
 	for (const auto& element : gramatica.m_Vn)
 		out << element << " ";

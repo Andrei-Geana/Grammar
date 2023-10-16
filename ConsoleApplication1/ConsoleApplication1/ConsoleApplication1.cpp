@@ -13,5 +13,6 @@ int main()
 	Gramatica curenta;
 	citire_fisier("intrare.prodb", curenta);
 	std::cout << curenta;
+	std::cout << "CUVANT FINAL: " << curenta.getCuvant() << "\n";
 	return 0;
 }

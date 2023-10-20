@@ -80,12 +80,13 @@ std::istream& operator>>(std::istream& in, Gramatica& gramatica)
 	gramatica.stringToVector(auxiliar, false);
 	std::getline(in, auxiliar);
 	gramatica.m_caracterStart = auxiliar;
-	std::string stanga, dreapta;
-	while (!in.eof())
 	{
-		in >> stanga >> dreapta;
-		gramatica.m_productie.push_back({ stanga,dreapta });
-		stanga.clear(); dreapta.clear();
+		std::string stanga, dreapta;
+		while (!in.eof())
+		{
+			in >> stanga >> dreapta;
+			gramatica.m_productie.push_back({ stanga,dreapta });
+		}
 	}
 	return in;
 }

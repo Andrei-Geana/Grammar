@@ -1,6 +1,6 @@
 #include "Gramatica.h"
 
-Gramatica::Gramatica(const std::vector<char>& Vn, const std::vector<char>& Vt, const std::string& caracterStart,
+Gramatica::Gramatica(const std::vector<char>& Vn, const std::vector<char>& Vt, const char& caracterStart,
 	const std::vector<Productie>& productie) : 
 	m_Vn{ Vn }, m_Vt{ Vt }, m_caracterStart{ caracterStart }, m_productie{productie}
 {
@@ -26,13 +26,13 @@ void Gramatica::stringToVector(const std::string& sir_caractere, const bool& inV
 
 void Gramatica::setStartCharacter(const char& caracterInceput)
 {
-	m_caracterStart.erase();
-	m_caracterStart.push_back(caracterInceput);
+	m_caracterStart=caracterInceput;
 }
 
 std::string Gramatica::getCuvant() const
 {
-	std::string sir_modificat = m_caracterStart;
+	std::string sir_modificat;
+	sir_modificat.push_back(m_caracterStart);
 	std::vector<uint16_t> indiceProductiePosibila;
 	do
 	{
@@ -60,15 +60,47 @@ uint16_t Gramatica::getIndiceRandom(const uint16_t& maxim) const
 
 void Gramatica::aplicareProductie(const uint16_t& index_productie, std::string& cuvant_modificat) const
 {
-	afisareProductie(index_productie, cuvant_modificat);
-	cuvant_modificat.replace(cuvant_modificat.find(m_productie[index_productie].m_stanga),
-		m_productie[index_productie].m_stanga.size(), m_productie[index_productie].m_dreapta);
+	std::vector<uint16_t> indiciAparitii = getIndiciAparitii(index_productie, cuvant_modificat);
+	std::cout << "GASIT LA ";
+	for (auto indice : indiciAparitii)
+		std::cout << indice << " ";
+	uint16_t indiceAparitieRandom = getIndiceRandom(indiciAparitii.size()-1);
+	replaceInString(index_productie, cuvant_modificat, indiciAparitii[indiceAparitieRandom]);
 }
 
-void Gramatica::afisareProductie(const uint16_t& index_productie, const std::string& cuvant_modificat) const
+std::vector<uint16_t> Gramatica::getIndiciAparitii(const uint16_t& index_productie, const std::string& cuvant_modificat) const
+{
+	std::vector<uint16_t> indiciAparitii;
+	const std::regex pattern(m_productie[index_productie].m_stanga);
+	std::smatch base_match;
+	auto it = std::sregex_iterator(cuvant_modificat.begin(), cuvant_modificat.end(), pattern);
+	for (it; it != std::sregex_iterator(); it++)
+	{
+		base_match = *it;
+		indiciAparitii.push_back(base_match.position());
+	}
+	return indiciAparitii;
+}
+
+void Gramatica::replaceInString(const uint16_t& index_productie, std::string& cuvant_modificat, const uint16_t& indiceStart) const
+{
+	afisareProductie(index_productie, cuvant_modificat, indiceStart);
+	if (m_productie[index_productie].m_dreapta[0] == lamda)
+	{
+		cuvant_modificat.replace(indiceStart,
+			m_productie[index_productie].m_stanga.size(), "");
+	}
+	else
+	{
+		cuvant_modificat.replace(indiceStart,
+			m_productie[index_productie].m_stanga.size(), m_productie[index_productie].m_dreapta);
+	}
+}
+
+void Gramatica::afisareProductie(const uint16_t& index_productie, const std::string& cuvant_modificat, const uint16_t& indiceStart) const
 {
 	std::cout << "CUVANT CURENT: " << cuvant_modificat << "\n";
-	std::cout << "SE APLICA " << m_productie[index_productie].m_stanga << " -> " << m_productie[index_productie].m_dreapta << "\n\n";
+	std::cout << "LA INDEXUL " << indiceStart << " SE APLICA " << m_productie[index_productie].m_stanga << " -> " << m_productie[index_productie].m_dreapta <<"\n\n";
 }
 
 std::istream& operator>>(std::istream& in, Gramatica& gramatica)
@@ -79,7 +111,7 @@ std::istream& operator>>(std::istream& in, Gramatica& gramatica)
 	std::getline(in, auxiliar);
 	gramatica.stringToVector(auxiliar, false);
 	std::getline(in, auxiliar);
-	gramatica.m_caracterStart = auxiliar;
+	gramatica.m_caracterStart = auxiliar[0];
 	{
 		std::string stanga, dreapta;
 		while (!in.eof())

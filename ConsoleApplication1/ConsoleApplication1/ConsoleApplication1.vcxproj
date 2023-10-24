@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="intrare.prodb" />
+    <None Include="intrare2.prodb" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

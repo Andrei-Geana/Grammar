@@ -5,6 +5,7 @@
 #include <fstream>
 #include <random>
 #include <regex>
+#include <unordered_set>
 
 class Gramatica
 {
@@ -17,14 +18,13 @@ public:
 	void setStartCharacter(const char&);
 	std::string getCuvant() const;
 
-	//TO BE DONE
-	// void verificareValabilitate();
+	bool verificareValabilitate() const;
 private:
 	std::vector<char> m_Vn;
 	std::vector<char> m_Vt;
 	char m_caracterStart;
 	std::vector<Productie> m_productie;
-	static const char lamda = '@';
+	static const char lambda = '@';
 
 	void stringToVector(const std::string&, const bool&);
 	uint16_t getIndiceRandom(const uint16_t&) const;
@@ -32,4 +32,10 @@ private:
 	std::vector<uint16_t> getIndiciAparitii(const uint16_t&, const std::string&) const;
 	void replaceInString(const uint16_t&, std::string&, const uint16_t&) const;
 	void afisareProductie(const uint16_t&, const std::string&, const uint16_t&) const;
+
+	bool isVnPartOfVt() const;
+	bool startCaracterInVn() const;
+	bool everyProductionHasOneVn() const;
+	bool existsOneProductionWithStartCaracter() const;
+	bool productionsContainOnlyVnAndVt() const;
 };

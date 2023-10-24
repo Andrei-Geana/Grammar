@@ -50,6 +50,87 @@ std::string Gramatica::getCuvant() const
 	return sir_modificat;
 }
 
+bool Gramatica::verificareValabilitate() const
+{
+	if (isVnPartOfVt()) return false;
+	if (!startCaracterInVn()) return false;
+	if (!everyProductionHasOneVn()) return false;
+	if (!existsOneProductionWithStartCaracter()) return false;
+	if (!productionsContainOnlyVnAndVt()) return false;
+	return true;
+}
+
+bool Gramatica::isVnPartOfVt() const
+{
+	for (auto const& caracter : m_Vn)
+	{
+		if (std::find(m_Vt.begin(), m_Vt.end(), caracter) != m_Vt.end())
+			return true;
+	}
+	return false;
+}
+
+bool Gramatica::startCaracterInVn() const
+{
+	return std::find(m_Vn.begin(), m_Vn.end(), m_caracterStart) != m_Vn.end();
+
+}
+
+bool Gramatica::everyProductionHasOneVn() const
+{
+	for (const auto& productie : m_productie)
+	{
+		bool hasAtLeastOneCaracter = false;
+		for (const auto& caracter : m_Vn)
+		{
+			if (std::find(productie.m_stanga.begin(), productie.m_stanga.end(), caracter) != productie.m_stanga.end())
+			{
+				hasAtLeastOneCaracter = true;
+				break;
+			}
+		}
+		if (!hasAtLeastOneCaracter)
+			return false;
+	}
+	return true;
+}
+
+bool Gramatica::existsOneProductionWithStartCaracter() const
+{
+	for (auto const& productie : m_productie)
+	{
+		if (productie.m_stanga.size() != 1)
+			continue;
+		if (std::find(productie.m_stanga.begin(), productie.m_stanga.end(), m_caracterStart) != productie.m_stanga.end())
+			return true;
+	}
+	return false;
+}
+
+bool Gramatica::productionsContainOnlyVnAndVt() const
+{
+	std::unordered_set<char> caractere;
+	caractere.insert(lambda);
+	for (auto const& caracter : m_Vn)
+		caractere.insert(caracter);
+	for (auto const& caracter : m_Vt)
+		caractere.insert(caracter);
+	for (auto const& productie : m_productie)
+	{
+		for (auto const& letter : productie.m_stanga)
+		{
+			if (caractere.find(letter) == caractere.end())
+				return false;
+		}
+		for (auto const& letter : productie.m_dreapta)
+		{
+			if (caractere.find(letter) == caractere.end())
+				return false;
+		}
+	}
+	return true;
+}
+
 uint16_t Gramatica::getIndiceRandom(const uint16_t& maxim) const
 {
 	std::random_device rd;
@@ -61,9 +142,6 @@ uint16_t Gramatica::getIndiceRandom(const uint16_t& maxim) const
 void Gramatica::aplicareProductie(const uint16_t& index_productie, std::string& cuvant_modificat) const
 {
 	std::vector<uint16_t> indiciAparitii = getIndiciAparitii(index_productie, cuvant_modificat);
-	std::cout << "GASIT LA ";
-	for (auto indice : indiciAparitii)
-		std::cout << indice << " ";
 	uint16_t indiceAparitieRandom = getIndiceRandom(indiciAparitii.size()-1);
 	replaceInString(index_productie, cuvant_modificat, indiciAparitii[indiceAparitieRandom]);
 }
@@ -85,7 +163,7 @@ std::vector<uint16_t> Gramatica::getIndiciAparitii(const uint16_t& index_product
 void Gramatica::replaceInString(const uint16_t& index_productie, std::string& cuvant_modificat, const uint16_t& indiceStart) const
 {
 	afisareProductie(index_productie, cuvant_modificat, indiceStart);
-	if (m_productie[index_productie].m_dreapta[0] == lamda)
+	if (m_productie[index_productie].m_dreapta[0] == lambda)
 	{
 		cuvant_modificat.replace(indiceStart,
 			m_productie[index_productie].m_stanga.size(), "");

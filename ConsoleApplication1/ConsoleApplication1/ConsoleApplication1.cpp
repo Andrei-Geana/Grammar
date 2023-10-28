@@ -1,8 +1,8 @@
 #include <iostream>
 #include <unordered_set>
-#include "Gramatica.h"
+#include "Grammar.h"
 
-void citire_fisier(const std::string& nume_fisier, Gramatica& curenta)
+void readGrammarFromFile(const std::string& nume_fisier, Grammar& curenta)
 {
 	std::ifstream fin{ nume_fisier };
 	fin >> curenta;
@@ -11,17 +11,24 @@ void citire_fisier(const std::string& nume_fisier, Gramatica& curenta)
 
 int main()
 {
-	Gramatica curenta;
-	citire_fisier("intrare2.prodb", curenta);
-	std::cout << curenta;
-	uint16_t n = 5;
-	std::unordered_set<std::string> cuvinte;
-	for(int i=0;i<1;i++)
-		cuvinte.insert(curenta.getCuvant());
-	for (const auto& cuvant : cuvinte)
+	Grammar current;
+	readGrammarFromFile("intrare2.prodb", current);
+	std::cout << current;
+	try
 	{
-		std::cout << cuvant << "\n";
-		if (cuvant == "aaaaaaabbab") std::cout << "GASIT";
+		if (!current.GrammarIsValid())
+			throw std::exception("ERROR: GRAMMAR IS NOT VALID!");
 	}
+	catch (std::exception ex)
+	{
+		std::cout << ex.what() << "\n";
+		return 1;
+	}
+	uint16_t n = 5;
+	std::unordered_set<std::string> words;
+	while (words.size() < 500)
+		words.emplace(current.GetCuvant());
+	for (const auto& word : words)
+		std::cout << word << "\n";
 	return 0;
 }

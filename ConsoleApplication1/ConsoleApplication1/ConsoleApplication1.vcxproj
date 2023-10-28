@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,11 +129,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
-    <ClCompile Include="Gramatica.cpp" />
+    <ClCompile Include="Grammar.cpp" />
     <ClCompile Include="Productie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Gramatica.h" />
+    <ClInclude Include="Grammar.h" />
     <ClInclude Include="Productie.h" />
   </ItemGroup>
   <ItemGroup>

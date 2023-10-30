@@ -19,7 +19,7 @@ public:
 	std::string GetCuvant() const;
 
 	bool GrammarIsValid() const;
-
+	bool GrammarIsRegular() const;
 private:
 	static const char k_lambda = '@';
 private:

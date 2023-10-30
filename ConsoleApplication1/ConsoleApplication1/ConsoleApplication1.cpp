@@ -26,9 +26,15 @@ int main()
 	}
 	uint16_t n = 5;
 	std::unordered_set<std::string> words;
+	if (current.GrammarIsRegular() == true)
+		std::cout << "YES";
+	else
+		std::cout << "NO";
+	/*
 	while (words.size() < 500)
 		words.emplace(current.GetCuvant());
 	for (const auto& word : words)
 		std::cout << word << "\n";
+		*/
 	return 0;
 }

@@ -63,6 +63,28 @@ bool Grammar::GrammarIsValid() const
 	return true;
 }
 
+bool Grammar::GrammarIsRegular() const
+{
+	for (const auto& productie : m_productie)
+	{
+		if (productie.m_stanga.size() != 1) return false;
+		if (std::find(m_Vn.begin(), m_Vn.begin(), productie.m_stanga[0]) == m_Vn.end()) return false;
+		if (productie.m_dreapta.size() > 2) return false;
+		//Case 1 : A -> a or A -> lambda
+		if (productie.m_dreapta.size() == 1)
+		{
+			if (productie.m_dreapta[0] == k_lambda) 
+				continue;
+			if (std::find(m_Vt.begin(), m_Vt.begin(), productie.m_dreapta[0]) == m_Vt.end()) return false;
+			continue;
+		}
+		//Case 2: A -> aB
+		if (std::find(m_Vt.begin(), m_Vt.begin(), productie.m_dreapta[0]) == m_Vt.end()) return false;
+		if (std::find(m_Vn.begin(), m_Vn.begin(), productie.m_dreapta[1]) == m_Vn.end()) return false;
+	}
+	return true;
+}
+
 bool Grammar::VnIsPartOfVt() const
 {
 	for (auto const& caracter : m_Vn)

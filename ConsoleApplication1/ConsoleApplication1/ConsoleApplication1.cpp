@@ -16,7 +16,7 @@ int main()
 	std::cout << current;
 	try
 	{
-		if (!current.GrammarIsValid())
+		if (!current.VerifyGrammar())
 			throw std::exception("ERROR: GRAMMAR IS NOT VALID!");
 	}
 	catch (std::exception ex)
@@ -26,15 +26,10 @@ int main()
 	}
 	uint16_t n = 5;
 	std::unordered_set<std::string> words;
-	if (current.GrammarIsRegular() == true)
-		std::cout << "YES";
-	else
-		std::cout << "NO";
-	/*
-	while (words.size() < 500)
-		words.emplace(current.GetCuvant());
+	while (words.size() < 1)
+		words.emplace(current.GenerateWord());
 	for (const auto& word : words)
 		std::cout << word << "\n";
-		*/
+		
 	return 0;
 }

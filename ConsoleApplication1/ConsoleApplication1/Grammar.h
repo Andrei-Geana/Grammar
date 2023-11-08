@@ -16,10 +16,11 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Grammar&);
 
 	void SetStartCharacter(const char&);
-	std::string GetCuvant() const;
+	std::string GenerateWord() const;
 
-	bool GrammarIsValid() const;
-	bool GrammarIsRegular() const;
+	bool VerifyGrammar() const;
+	bool IsRegular() const;
+
 private:
 	static const char k_lambda = '@';
 private:

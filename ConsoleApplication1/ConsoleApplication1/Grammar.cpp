@@ -30,9 +30,9 @@ void Grammar::SetStartCharacter(const char& caracterInceput)
 	m_startCaracter=caracterInceput;
 }
 
-std::string Grammar::GetCuvant() const
+std::string Grammar::GenerateWord() const
 {
-	if (!this->GrammarIsValid())
+	if (!this->VerifyGrammar())
 		throw std::exception("ERROR: Not able to generate word. Grammar not valid.");
 	std::string sir_modificat;
 	sir_modificat.push_back(m_startCaracter);
@@ -53,7 +53,7 @@ std::string Grammar::GetCuvant() const
 	return sir_modificat;
 }
 
-bool Grammar::GrammarIsValid() const
+bool Grammar::VerifyGrammar() const
 {
 	if (VnIsPartOfVt()) return false;
 	if (!StartCaracterIsInVn()) return false;
@@ -63,7 +63,7 @@ bool Grammar::GrammarIsValid() const
 	return true;
 }
 
-bool Grammar::GrammarIsRegular() const
+bool Grammar::IsRegular() const
 {
 	for (const auto& productie : m_productie)
 	{
@@ -187,7 +187,7 @@ std::vector<uint16_t> Grammar::GetIndiciAparitii(const uint16_t& index_productie
 
 void Grammar::ReplaceInString(const uint16_t& index_productie, std::string& cuvant_modificat, const uint16_t& indiceStart) const
 {
-	//AfisareProductie(index_productie, cuvant_modificat, indiceStart);
+	PrintProduction(index_productie, cuvant_modificat, indiceStart);
 	if (m_productie[index_productie].m_dreapta[0] == k_lambda)
 	{
 		cuvant_modificat.replace(indiceStart,

@@ -24,12 +24,18 @@
     <ClCompile Include="Productie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Automata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grammar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Productie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Automata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

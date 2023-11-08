@@ -128,13 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Automata.cpp" />
+    <ClCompile Include="FiniteAutomaton.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="Grammar.cpp" />
     <ClCompile Include="Productie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Automata.h" />
+    <ClInclude Include="FiniteAutomaton.h" />
     <ClInclude Include="Grammar.h" />
     <ClInclude Include="Productie.h" />
   </ItemGroup>

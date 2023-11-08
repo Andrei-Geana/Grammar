@@ -1,15 +1,44 @@
 #include "FiniteAutomaton.h"
-/*
-bool Automata::WordIsValid(std::string word, const std::string& currentState) const
+
+void FiniteAutomaton::SetPossibleStates(const std::vector<char>& characters) noexcept
 {
-	//pentru starea curenta, iau toate rezultatele posibile
-	auto getNextState = ;
-	for (const auto& rezultat : getNextState)
+	m_possibleStates = characters;
+	int i = 0;
+	while (i<characters.size())
 	{
-		//modific cuvantul conform starii urmatoare
-		std::string newWord = ;
-		return WordIsValid(newWord, newState);
+		char newCharacter = characters[i] + 1;
+		auto found = std::find(m_possibleStates.begin(), m_possibleStates.end(), newCharacter);
+		if (found == m_possibleStates.end())
+		{
+			m_possibleStates.emplace_back(newCharacter);
+			return;
+		}
+		i++;
 	}
-	return false;
 }
-*/
+
+void FiniteAutomaton::SetAlphabet(const std::vector<char>& characters) noexcept
+{
+	m_alphabet = characters;
+}
+
+
+void FiniteAutomaton::SetInitialState(const char& character) noexcept
+{
+	m_initialState = character;
+}
+
+void FiniteAutomaton::SetFinalStates() noexcept
+{
+	//Adaug doar T momentan
+	m_finalStates.emplace_back(m_possibleStates[m_possibleStates.size()-1]);
+	/*
+	if stanga -> dreapta and dreapta -> lambda
+		adaug m_initialState
+	*/
+}
+
+std::vector<char> FiniteAutomaton::getFinalStates() const noexcept
+{
+	return m_finalStates;
+}

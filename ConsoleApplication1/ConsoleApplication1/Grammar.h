@@ -11,12 +11,22 @@ class Grammar
 {
 public:
 	Grammar(const std::vector<char>&, const std::vector<char>&, const char&, const std::vector<Productie>&);
-	Grammar();
+	Grammar() = default;
+
+	void readGrammarFromFile(const std::string& nume_fisier);
+
 	friend std::istream& operator>>(std::istream& in, Grammar&);
 	friend std::ostream& operator<<(std::ostream& out, const Grammar&);
 
 	void SetStartCharacter(const char&);
 	std::string GenerateWord() const;
+
+	//TEMPORARY
+	std::vector<char> getVn() const noexcept;
+	std::vector<char> getVt() const noexcept;
+	char getStartCharacter() const noexcept;
+	std::vector<Productie> getProductii() const noexcept;
+	//
 
 	bool VerifyGrammar() const;
 	bool IsRegular() const;

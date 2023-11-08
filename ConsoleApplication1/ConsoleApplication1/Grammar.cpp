@@ -6,9 +6,11 @@ Grammar::Grammar(const std::vector<char>& Vn, const std::vector<char>& Vt, const
 {
 }
 
-Grammar::Grammar()
+void Grammar::readGrammarFromFile(const std::string& nume_fisier)
 {
-	/* EMPTY */
+	std::ifstream fin{ nume_fisier };
+	fin >> *this;
+	fin.close();
 }
 
 void Grammar::InitializeVnAndVt(const std::string& sir_caractere, const bool& inVn)
@@ -51,6 +53,26 @@ std::string Grammar::GenerateWord() const
 		ApplyProduction(indiceProductiePosibila[indiceRandom], sir_modificat);
 	} while (!indiceProductiePosibila.empty());
 	return sir_modificat;
+}
+
+std::vector<char> Grammar::getVn() const noexcept
+{
+	return m_Vn;
+}
+
+std::vector<char> Grammar::getVt() const noexcept
+{
+	return m_Vt;
+}
+
+char Grammar::getStartCharacter() const noexcept
+{
+	return m_startCaracter;
+}
+
+std::vector<Productie> Grammar::getProductii() const noexcept
+{
+	return m_productie;
 }
 
 bool Grammar::VerifyGrammar() const

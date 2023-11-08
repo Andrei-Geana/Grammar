@@ -24,7 +24,7 @@
     <ClCompile Include="Productie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Automata.cpp">
+    <ClCompile Include="FiniteAutomaton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="Productie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Automata.h">
+    <ClInclude Include="FiniteAutomaton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

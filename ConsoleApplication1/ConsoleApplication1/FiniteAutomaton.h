@@ -1,19 +1,36 @@
 #pragma once
+#include <iostream>
 #include <unordered_map>
 #include <string>
 class FiniteAutomaton
 {
 public:
-	FiniteAutomaton(const uint16_t&, const std::vector<char>&, const std::string&, const std::vector<std::string>&,
-		const std::pair < std::string, std::vector<std::string>>&);
+	FiniteAutomaton() = default;
 
-	bool WordIsValid(std::string, const std::string&) const;
+
+	void SetPossibleStates(const std::vector<char>&) noexcept;
+	void SetAlphabet(const std::vector<char>&) noexcept;
+	void SetInitialState(const char&) noexcept;
+	void SetFinalStates() noexcept;
+
+	std::vector<char> getFinalStates() const noexcept;
+
+	/*
+	bool VerifyAutomaton() const noexcept;
+	void PrintAutomaton() const noexcept;
+	bool CheckWord(const char&, const std::string&) const noexcept;
+	bool isDeterministic() const noexcept;
+	*/
+
 private:
-	std::vector<std::string> m_Q;
-	std::vector<char> m_Sigma;
-	std::string m_initialState;
-	std::vector<std::string> m_F;
-	std::unordered_map<std::string, std::vector<std::string>> m_delta;
+	std::vector<char> m_possibleStates;
+	std::vector<char> m_alphabet;
+	char m_initialState;
+	std::vector<char> m_finalStates;
+
+	//A cu a se poate duce in A,B,C
+	//A cu B se poate duce in B, C
+	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> m_Productions;
 
 };
 

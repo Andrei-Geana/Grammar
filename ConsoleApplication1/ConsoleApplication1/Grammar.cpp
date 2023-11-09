@@ -55,24 +55,53 @@ std::string Grammar::GenerateWord() const
 	return sir_modificat;
 }
 
-std::vector<char> Grammar::getVn() const noexcept
+FiniteAutomaton Grammar::GrammarToAutomaton() const noexcept
 {
-	return m_Vn;
-}
+	FiniteAutomaton automaton;
+	automaton.SetPossibleStates(m_Vn);
+	automaton.SetAlphabet(m_Vt);
+	automaton.SetInitialState(m_startCaracter);
+	automaton.SetFinalStates();
 
-std::vector<char> Grammar::getVt() const noexcept
-{
-	return m_Vt;
-}
+	//TO BE DONE
+	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> transitionFunction;
+	std::vector<Productie> productii = m_productie;
+	for (const auto& productie : productii)
+	{
+		char stanga = productie.m_stanga[0];
+		std::string dreapta = productie.m_dreapta;
 
-char Grammar::getStartCharacter() const noexcept
-{
-	return m_startCaracter;
-}
+		if (transitionFunction.find(stanga) == transitionFunction.end())
+		{
+			std::unordered_map<char, std::vector<char>> emptyMap;
+			transitionFunction.emplace(stanga, emptyMap);
+		}
 
-std::vector<Productie> Grammar::getProductii() const noexcept
-{
-	return m_productie;
+		auto* getPossibilities = &transitionFunction[stanga];
+		if (dreapta.size() == 1)
+		{
+			char firstCharacter = dreapta[0];
+			if (getPossibilities->find(firstCharacter) == getPossibilities->end())
+			{
+				std::vector<char> emptyVector;
+				getPossibilities->emplace(firstCharacter, emptyVector);
+			}
+			getPossibilities->at(firstCharacter).emplace_back(automaton.getFinalStates()[0]);
+		}
+		else
+		{
+			char firstCharacter = dreapta[0];
+			char secondCharacter = dreapta[1];
+			if (getPossibilities->find(firstCharacter) == getPossibilities->end())
+			{
+				std::vector<char> emptyVector;
+				getPossibilities->emplace(firstCharacter, emptyVector);
+			}
+			getPossibilities->at(firstCharacter).emplace_back(secondCharacter);
+		}
+	}
+	automaton.SetFunctions(transitionFunction);
+	return automaton;
 }
 
 bool Grammar::VerifyGrammar() const

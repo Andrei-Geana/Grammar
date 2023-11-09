@@ -12,12 +12,16 @@ public:
 	void SetAlphabet(const std::vector<char>&) noexcept;
 	void SetInitialState(const char&) noexcept;
 	void SetFinalStates() noexcept;
+	void SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
 
 	std::vector<char> getFinalStates() const noexcept;
 
+	void PrintAutomaton() const noexcept;
+
+	friend std::ostream& operator << (std::ostream&, const FiniteAutomaton&);
+
 	/*
 	bool VerifyAutomaton() const noexcept;
-	void PrintAutomaton() const noexcept;
 	bool CheckWord(const char&, const std::string&) const noexcept;
 	bool isDeterministic() const noexcept;
 	*/
@@ -30,7 +34,7 @@ private:
 
 	//A cu a se poate duce in A,B,C
 	//A cu B se poate duce in B, C
-	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> m_Productions;
+	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> m_Functions;
 
 };
 

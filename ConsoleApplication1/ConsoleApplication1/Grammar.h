@@ -1,5 +1,6 @@
 #pragma once
 #include "Productie.h"
+#include "FiniteAutomaton.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -21,12 +22,7 @@ public:
 	void SetStartCharacter(const char&);
 	std::string GenerateWord() const;
 
-	//TEMPORARY
-	std::vector<char> getVn() const noexcept;
-	std::vector<char> getVt() const noexcept;
-	char getStartCharacter() const noexcept;
-	std::vector<Productie> getProductii() const noexcept;
-	//
+	FiniteAutomaton GrammarToAutomaton() const noexcept;
 
 	bool VerifyGrammar() const;
 	bool IsRegular() const;

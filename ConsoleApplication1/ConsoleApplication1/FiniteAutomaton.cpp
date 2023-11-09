@@ -38,7 +38,51 @@ void FiniteAutomaton::SetFinalStates() noexcept
 	*/
 }
 
+void FiniteAutomaton::SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>& function) noexcept
+{
+	m_Functions = function;
+}
+
+
 std::vector<char> FiniteAutomaton::getFinalStates() const noexcept
 {
 	return m_finalStates;
+}
+
+void FiniteAutomaton::PrintAutomaton() const noexcept
+{
+	std::cout<< "AUTOMATON:\n";
+	std::cout << *this;
+}
+
+std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)
+{
+	out << "POSSIBLE STATES = { ";
+	for (const auto& element : automaton.m_possibleStates)
+		out << element << " ";
+	out << "}\nALPHABET = { ";
+	for (const auto& element : automaton.m_alphabet)
+		out << element << " ";
+	out << "}\nInitial state: " << automaton.m_initialState;
+	out << "\nFunctions:\n";
+	for (const auto& functie : automaton.m_Functions)
+	{
+		out << "(" << functie.first << ", ";
+		for (const auto& dreapta : functie.second)
+		{
+			out << dreapta.first << ") = { ";
+			for (const auto& finala : dreapta.second)
+			{
+				out << finala << " ";
+			}
+			out << "}";
+			//out << "\n";
+		}
+		out << "\n";
+	}
+	out << "Final states = { ";
+	for (const auto& element : automaton.m_finalStates)
+		out << element << " ";
+	out << "}\n";
+	return out;
 }

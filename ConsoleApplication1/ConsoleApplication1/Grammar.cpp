@@ -13,7 +13,7 @@ void Grammar::readGrammarFromFile(const std::string& nume_fisier)
 	fin.close();
 }
 
-void Grammar::InitializeVnAndVt(const std::string& sir_caractere, const bool& inVn)
+void Grammar::initializeVnAndVt(const std::string& sir_caractere, const bool& inVn)
 {
 	if (inVn)
 		for (int index = 0; index < sir_caractere.size(); index += 2)
@@ -27,14 +27,14 @@ void Grammar::InitializeVnAndVt(const std::string& sir_caractere, const bool& in
 		}
 }
 
-void Grammar::SetStartCharacter(const char& caracterInceput)
+void Grammar::setStartCharacter(const char& caracterInceput)
 {
 	m_startCaracter=caracterInceput;
 }
 
-std::string Grammar::GenerateWord() const
+std::string Grammar::generateWord() const
 {
-	if (!this->VerifyGrammar())
+	if (!this->verifyGrammar())
 		throw std::exception("ERROR: Not able to generate word. Grammar not valid.");
 	std::string sir_modificat;
 	sir_modificat.push_back(m_startCaracter);
@@ -55,13 +55,26 @@ std::string Grammar::GenerateWord() const
 	return sir_modificat;
 }
 
-FiniteAutomaton Grammar::GrammarToAutomaton() const noexcept
+bool Grammar::canGenerateLambda() const noexcept
+{
+	auto foundProduction = std::find_if(m_productie.begin(), m_productie.end(), [this](const Productie& productie) {
+		if (productie.m_stanga[0] == m_startCaracter)
+			if (productie.m_dreapta[0] == k_lambda)
+				return true;
+		return false;
+		});
+	if (foundProduction != m_productie.end())
+		return true;
+	return false;
+}
+
+FiniteAutomaton Grammar::grammarToAutomaton() const noexcept
 {
 	FiniteAutomaton automaton;
 	automaton.SetPossibleStates(m_Vn);
 	automaton.SetAlphabet(m_Vt);
 	automaton.SetInitialState(m_startCaracter);
-	automaton.SetFinalStates();
+	automaton.SetFinalStates(canGenerateLambda());
 
 	//TO BE DONE
 	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> transitionFunction;
@@ -81,6 +94,8 @@ FiniteAutomaton Grammar::GrammarToAutomaton() const noexcept
 		if (dreapta.size() == 1)
 		{
 			char firstCharacter = dreapta[0];
+			if (firstCharacter == k_lambda)
+				continue;
 			if (getPossibilities->find(firstCharacter) == getPossibilities->end())
 			{
 				std::vector<char> emptyVector;
@@ -104,7 +119,7 @@ FiniteAutomaton Grammar::GrammarToAutomaton() const noexcept
 	return automaton;
 }
 
-bool Grammar::VerifyGrammar() const
+bool Grammar::verifyGrammar() const
 {
 	if (VnIsPartOfVt()) return false;
 	if (!StartCaracterIsInVn()) return false;
@@ -114,7 +129,7 @@ bool Grammar::VerifyGrammar() const
 	return true;
 }
 
-bool Grammar::IsRegular() const
+bool Grammar::isRegular() const
 {
 	for (const auto& productie : m_productie)
 	{
@@ -261,9 +276,9 @@ std::istream& operator>>(std::istream& in, Grammar& gramatica)
 {
 	std::string auxiliar;
 	std::getline(in, auxiliar);
-	gramatica.InitializeVnAndVt(auxiliar, true);
+	gramatica.initializeVnAndVt(auxiliar, true);
 	std::getline(in, auxiliar);
-	gramatica.InitializeVnAndVt(auxiliar, false);
+	gramatica.initializeVnAndVt(auxiliar, false);
 	std::getline(in, auxiliar);
 	gramatica.m_startCaracter = auxiliar[0];
 	{

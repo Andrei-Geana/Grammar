@@ -28,14 +28,12 @@ void FiniteAutomaton::SetInitialState(const char& character) noexcept
 	m_initialState = character;
 }
 
-void FiniteAutomaton::SetFinalStates() noexcept
+void FiniteAutomaton::SetFinalStates(bool grammarContainsLambda=false) noexcept
 {
 	//Adaug doar T momentan
+	if (grammarContainsLambda)
+		m_finalStates.emplace_back(m_possibleStates[0]);
 	m_finalStates.emplace_back(m_possibleStates[m_possibleStates.size()-1]);
-	/*
-	if stanga -> dreapta and dreapta -> lambda
-		adaug m_initialState
-	*/
 }
 
 void FiniteAutomaton::SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>& function) noexcept

@@ -11,7 +11,7 @@ public:
 	void SetPossibleStates(const std::vector<char>&) noexcept;
 	void SetAlphabet(const std::vector<char>&) noexcept;
 	void SetInitialState(const char&) noexcept;
-	void SetFinalStates() noexcept;
+	void SetFinalStates(bool) noexcept;
 	void SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
 
 	std::vector<char> getFinalStates() const noexcept;

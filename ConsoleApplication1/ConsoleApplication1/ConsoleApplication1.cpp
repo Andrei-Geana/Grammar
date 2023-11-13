@@ -10,7 +10,7 @@ int main()
 	std::cout << current;
 	try
 	{
-		if (!current.VerifyGrammar())
+		if (!current.verifyGrammar())
 			throw std::exception("ERROR: GRAMMAR IS NOT VALID!");
 	}
 	catch (std::exception ex)
@@ -18,12 +18,12 @@ int main()
 		std::cout << ex.what() << "\n";
 		return 1;
 	}
-	FiniteAutomaton curenta = current.GrammarToAutomaton();
+	FiniteAutomaton curenta = current.grammarToAutomaton();
 	curenta.PrintAutomaton();
 	uint16_t n = 5;
 	std::unordered_set<std::string> words;
 	while (words.size() < 0)
-		words.emplace(current.GenerateWord());
+		words.emplace(current.generateWord());
 	for (const auto& word : words)
 		std::cout << word << "\n";
 		

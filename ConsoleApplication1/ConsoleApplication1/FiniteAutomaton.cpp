@@ -1,6 +1,6 @@
 #include "FiniteAutomaton.h"
 
-void FiniteAutomaton::SetPossibleStates(const std::vector<char>& characters) noexcept
+void FiniteAutomaton::setPossibleStates(const std::vector<char>& characters) noexcept
 {
 	m_possibleStates = characters;
 	int i = 0;
@@ -17,18 +17,18 @@ void FiniteAutomaton::SetPossibleStates(const std::vector<char>& characters) noe
 	}
 }
 
-void FiniteAutomaton::SetAlphabet(const std::vector<char>& characters) noexcept
+void FiniteAutomaton::setAlphabet(const std::vector<char>& characters) noexcept
 {
 	m_alphabet = characters;
 }
 
 
-void FiniteAutomaton::SetInitialState(const char& character) noexcept
+void FiniteAutomaton::setInitialState(const char& character) noexcept
 {
 	m_initialState = character;
 }
 
-void FiniteAutomaton::SetFinalStates(bool grammarContainsLambda=false) noexcept
+void FiniteAutomaton::setFinalStates(bool grammarContainsLambda=false) noexcept
 {
 	//Adaug doar T momentan
 	if (grammarContainsLambda)
@@ -36,7 +36,7 @@ void FiniteAutomaton::SetFinalStates(bool grammarContainsLambda=false) noexcept
 	m_finalStates.emplace_back(m_possibleStates[m_possibleStates.size()-1]);
 }
 
-void FiniteAutomaton::SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>& function) noexcept
+void FiniteAutomaton::setFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>& function) noexcept
 {
 	m_Functions = function;
 }
@@ -47,7 +47,7 @@ std::vector<char> FiniteAutomaton::getFinalStates() const noexcept
 	return m_finalStates;
 }
 
-void FiniteAutomaton::PrintAutomaton() const noexcept
+void FiniteAutomaton::printAutomaton() const noexcept
 {
 	std::cout<< "AUTOMATON:\n";
 	std::cout << *this;

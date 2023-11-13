@@ -19,7 +19,7 @@ int main()
 		return 1;
 	}
 	FiniteAutomaton curenta = current.grammarToAutomaton();
-	curenta.PrintAutomaton();
+	curenta.printAutomaton();
 	uint16_t n = 5;
 	std::unordered_set<std::string> words;
 	while (words.size() < 0)

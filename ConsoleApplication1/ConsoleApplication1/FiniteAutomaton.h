@@ -8,15 +8,15 @@ public:
 	FiniteAutomaton() = default;
 
 
-	void SetPossibleStates(const std::vector<char>&) noexcept;
-	void SetAlphabet(const std::vector<char>&) noexcept;
-	void SetInitialState(const char&) noexcept;
-	void SetFinalStates(bool) noexcept;
-	void SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
+	void setPossibleStates(const std::vector<char>&) noexcept;
+	void setAlphabet(const std::vector<char>&) noexcept;
+	void setInitialState(const char&) noexcept;
+	void setFinalStates(bool) noexcept;
+	void setFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
 
 	std::vector<char> getFinalStates() const noexcept;
 
-	void PrintAutomaton() const noexcept;
+	void printAutomaton() const noexcept;
 
 	friend std::ostream& operator << (std::ostream&, const FiniteAutomaton&);
 

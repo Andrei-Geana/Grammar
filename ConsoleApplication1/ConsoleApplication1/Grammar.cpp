@@ -8,7 +8,6 @@ Grammar::Grammar(const std::vector<char>& Vn, const std::vector<char>& Vt, const
 
 void Grammar::printGrammar(std::ostream& os) const noexcept
 {
-	os << "GRAMMAR:\n";
 	os << *this;
 }
 

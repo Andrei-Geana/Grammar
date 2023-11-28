@@ -110,6 +110,20 @@ bool FiniteAutomaton::InitialToFinalRoute(std::unordered_map<char, bool>& visite
 	return false;
 }
 
+bool FiniteAutomaton::IsStateInPossibleStates(const char& state) const noexcept {
+	for (const auto& possibleState : m_possibleStates)
+	{
+		if (possibleState == state) return true;
+	}
+	return false;
+}
+
+bool FiniteAutomaton::VerifyAutomaton() const noexcept {
+	InitialToFinalRoute;
+	IsStateInPossibleStates(m_initialState);
+	for (const auto& finalState : m_finalStates)
+		IsStateInPossibleStates(finalState);
+}
 
 std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)
 {

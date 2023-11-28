@@ -22,6 +22,10 @@ public:
 
 	bool InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state) const noexcept;
 
+	bool IsStateInPossibleStates(const char& state) const noexcept;
+
+	bool VerifyAutomaton() const noexcept;
+
 	friend std::ostream& operator << (std::ostream&, const FiniteAutomaton&);
 	/*
 	bool VerifyAutomaton() const noexcept;

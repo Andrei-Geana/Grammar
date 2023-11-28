@@ -84,6 +84,33 @@ bool FiniteAutomaton::checkWord(const char& currentState, const std::string& cur
 	return false;
 }
 
+bool FiniteAutomaton::InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state = '-') const noexcept
+{
+	if (state == '-')
+	{
+		state = m_initialState;
+	}
+	visitedStates.insert({ state,true });
+	for (const auto& finalState : m_finalStates)
+	{
+		if (finalState == state) return true;
+	}
+	std::unordered_map<char, std::vector<char>> functie = m_Functions.at(state);
+	for (const auto& dreapta : functie)
+	{
+		for (const auto& nextState : dreapta.second)
+		{
+			if (visitedStates[nextState] == false)
+			{
+				std::cout << "**";
+				InitialToFinalRoute(visitedStates, nextState);
+			}
+		}
+	}
+	return false;
+}
+
+
 std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)
 {
 	out << "POSSIBLE STATES = { ";

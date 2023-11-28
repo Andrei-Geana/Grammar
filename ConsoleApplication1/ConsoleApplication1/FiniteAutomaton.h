@@ -20,6 +20,8 @@ public:
 	void printAutomaton(std::ostream&) const noexcept;
 	bool checkWord(const char&, const std::string&) const noexcept;
 
+	bool InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state) const noexcept;
+
 	friend std::ostream& operator << (std::ostream&, const FiniteAutomaton&);
 	/*
 	bool VerifyAutomaton() const noexcept;

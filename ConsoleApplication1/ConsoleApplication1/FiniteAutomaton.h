@@ -15,14 +15,14 @@ public:
 	void setFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
 
 	std::vector<char> getFinalStates() const noexcept;
+	char getInitialState() const noexcept;
 
-	void printAutomaton() const noexcept;
+	void printAutomaton(std::ostream&) const noexcept;
+	bool checkWord(const char&, const std::string&) const noexcept;
 
 	friend std::ostream& operator << (std::ostream&, const FiniteAutomaton&);
-
 	/*
 	bool VerifyAutomaton() const noexcept;
-	bool CheckWord(const char&, const std::string&) const noexcept;
 	bool isDeterministic() const noexcept;
 	*/
 

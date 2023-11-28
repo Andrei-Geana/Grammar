@@ -14,6 +14,7 @@ public:
 	Grammar(const std::vector<char>&, const std::vector<char>&, const char&, const std::vector<Productie>&);
 	Grammar() = default;
 
+	void printGrammar(std::ostream&) const noexcept;
 	void readGrammarFromFile(const std::string& nume_fisier);
 
 	friend std::istream& operator>>(std::istream& in, Grammar&);

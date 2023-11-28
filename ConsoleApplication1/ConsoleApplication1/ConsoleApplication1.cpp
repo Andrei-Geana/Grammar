@@ -5,12 +5,12 @@
 
 int main()
 {
-	Grammar current;
-	current.readGrammarFromFile("intrare2.prodb");
-	std::cout << current;
+	Grammar grammar;
+	grammar.readGrammarFromFile("intrare2.prodb");
+	grammar.printGrammar(std::cout);
 	try
 	{
-		if (!current.verifyGrammar())
+		if (!grammar.verifyGrammar())
 			throw std::exception("ERROR: GRAMMAR IS NOT VALID!");
 	}
 	catch (std::exception ex)
@@ -18,14 +18,16 @@ int main()
 		std::cout << ex.what() << "\n";
 		return 1;
 	}
-	FiniteAutomaton curenta = current.grammarToAutomaton();
-	curenta.printAutomaton();
+	FiniteAutomaton automaton = grammar.grammarToAutomaton();
+	automaton.printAutomaton(std::cout);
+	std::cout << "\n" << std::boolalpha << automaton.checkWord(automaton.getInitialState(), "aab") << "\n";
+	//
 	uint16_t n = 5;
 	std::unordered_set<std::string> words;
-	while (words.size() < 0)
-		words.emplace(current.generateWord());
+	while (words.size() < 5)
+		words.emplace(grammar.generateWord());
 	for (const auto& word : words)
 		std::cout << word << "\n";
-		
+	//
 	return 0;
 }

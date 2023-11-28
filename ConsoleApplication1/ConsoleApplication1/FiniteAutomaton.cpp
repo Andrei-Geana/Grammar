@@ -47,10 +47,41 @@ std::vector<char> FiniteAutomaton::getFinalStates() const noexcept
 	return m_finalStates;
 }
 
-void FiniteAutomaton::printAutomaton() const noexcept
+char FiniteAutomaton::getInitialState() const noexcept
 {
-	std::cout<< "AUTOMATON:\n";
-	std::cout << *this;
+	return m_initialState;
+}
+
+void FiniteAutomaton::printAutomaton(std::ostream& os) const noexcept
+{
+	os << "AUTOMATON:\n";
+	os << *this;
+}
+
+bool FiniteAutomaton::checkWord(const char& currentState, const std::string& currentWord) const noexcept
+{
+	//std::cout << currentState << " with ";
+	if (currentWord.length() == 0 || currentWord[0] == '@')
+	{
+		if (m_finalStates[0] == currentState)
+			return true;
+		if(m_finalStates.size()==2)
+			if(m_finalStates[1]==currentState)
+				return true;
+		return false;
+	}
+	for (const auto& function : m_Functions.at(currentState))
+	{
+		//std::cout << function.first << " can go in ";
+		for (const auto& elements : function.second)
+		{
+			//std::cout << elements << " ";
+			bool found = checkWord(elements, currentWord.substr(1, currentWord.length() - 1));
+			if (found) return true;
+		}
+		//std::cout << "\n";
+	}
+	return false;
 }
 
 std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)

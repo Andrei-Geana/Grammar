@@ -6,6 +6,12 @@ Grammar::Grammar(const std::vector<char>& Vn, const std::vector<char>& Vt, const
 {
 }
 
+void Grammar::printGrammar(std::ostream& os) const noexcept
+{
+	os << "GRAMMAR:\n";
+	os << *this;
+}
+
 void Grammar::readGrammarFromFile(const std::string& nume_fisier)
 {
 	std::ifstream fin{ nume_fisier };
@@ -52,6 +58,8 @@ std::string Grammar::generateWord() const
 		uint16_t indiceRandom = getIndiceRandom(indiceProductiePosibila.size()-1);
 		applyProduction(indiceProductiePosibila[indiceRandom], sir_modificat);
 	} while (!indiceProductiePosibila.empty());
+	if (sir_modificat.length() == 0)
+		return "@";
 	return sir_modificat;
 }
 
@@ -253,7 +261,7 @@ std::vector<uint16_t> Grammar::getIndiciAparitii(const uint16_t& index_productie
 
 void Grammar::replaceInString(const uint16_t& index_productie, std::string& cuvant_modificat, const uint16_t& indiceStart) const
 {
-	printProduction(index_productie, cuvant_modificat, indiceStart);
+	//printProduction(index_productie, cuvant_modificat, indiceStart);
 	if (m_productie[index_productie].m_dreapta[0] == k_lambda)
 	{
 		cuvant_modificat.replace(indiceStart,

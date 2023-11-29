@@ -1,5 +1,7 @@
 #include "FiniteAutomaton.h"
 
+char FiniteAutomaton::k_lambda{' '};
+
 void FiniteAutomaton::setPossibleStates(const std::vector<char>& characters) noexcept
 {
 	m_possibleStates = characters;
@@ -41,6 +43,11 @@ void FiniteAutomaton::setFunctions(const std::unordered_map<char, std::unordered
 	m_Functions = function;
 }
 
+void FiniteAutomaton::setLambda(const char& character) noexcept
+{
+	k_lambda = character;
+}
+
 
 std::vector<char> FiniteAutomaton::getFinalStates() const noexcept
 {
@@ -58,7 +65,28 @@ void FiniteAutomaton::printAutomaton(std::ostream& os) const noexcept
 	os << *this;
 }
 
-bool FiniteAutomaton::checkWord(const char& currentState, const std::string& currentWord) const noexcept
+bool FiniteAutomaton::wordHasValidCharacters(const std::string& word) const noexcept
+{
+	for (auto& letter : word)
+	{
+		auto found = std::find(m_alphabet.begin(), m_alphabet.end(), letter);
+		if (found == m_alphabet.end())
+			return false;
+	}
+	return true;
+}
+
+bool FiniteAutomaton::checkWord(const std::string& word) const noexcept
+{
+	if (word.size() == 1)
+		if (word[0] == k_lambda)
+			return std::find(m_finalStates.begin(), m_finalStates.end(), m_initialState) != m_finalStates.end();
+	if (!wordHasValidCharacters(word))
+		return false;
+	return checkValidWord(m_initialState, word);
+}
+
+bool FiniteAutomaton::checkValidWord(const char& currentState, const std::string& currentWord) const noexcept
 {
 	//std::cout << currentState << " with ";
 	if (currentWord.length() == 0 || currentWord[0] == '@')
@@ -76,7 +104,7 @@ bool FiniteAutomaton::checkWord(const char& currentState, const std::string& cur
 		for (const auto& elements : function.second)
 		{
 			//std::cout << elements << " ";
-			bool found = checkWord(elements, currentWord.substr(1, currentWord.length() - 1));
+			bool found = checkValidWord(elements, currentWord.substr(1, currentWord.length() - 1));
 			if (found) return true;
 		}
 		//std::cout << "\n";
@@ -84,45 +112,47 @@ bool FiniteAutomaton::checkWord(const char& currentState, const std::string& cur
 	return false;
 }
 
-bool FiniteAutomaton::InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state = '-') const noexcept
+//bool FiniteAutomaton::InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state = '-') const noexcept
+//{
+//	if (state == '-')
+//	{
+//		state = m_initialState;
+//	}
+//	visitedStates.insert({ state,true });
+//	for (const auto& finalState : m_finalStates)
+//	{
+//		if (finalState == state) return true;
+//	}
+//	std::unordered_map<char, std::vector<char>> functie = m_Functions.at(state);
+//	for (const auto& dreapta : functie)
+//	{
+//		for (const auto& nextState : dreapta.second)
+//		{
+//			if (visitedStates[nextState] == false)
+//			{
+//				std::cout << "**";
+//				InitialToFinalRoute(visitedStates, nextState);
+//			}
+//		}
+//	}
+//	return false;
+//}
+
+//bool FiniteAutomaton::IsStateInPossibleStates(const char& state) const noexcept {
+//	for (const auto& possibleState : m_possibleStates)
+//	{
+//		if (possibleState == state) return true;
+//	}
+//	return false;
+//}
+
+bool FiniteAutomaton::VerifyAutomaton() const noexcept 
 {
-	if (state == '-')
-	{
-		state = m_initialState;
-	}
-	visitedStates.insert({ state,true });
-	for (const auto& finalState : m_finalStates)
-	{
-		if (finalState == state) return true;
-	}
-	std::unordered_map<char, std::vector<char>> functie = m_Functions.at(state);
-	for (const auto& dreapta : functie)
-	{
-		for (const auto& nextState : dreapta.second)
-		{
-			if (visitedStates[nextState] == false)
-			{
-				std::cout << "**";
-				InitialToFinalRoute(visitedStates, nextState);
-			}
-		}
-	}
-	return false;
-}
-
-bool FiniteAutomaton::IsStateInPossibleStates(const char& state) const noexcept {
-	for (const auto& possibleState : m_possibleStates)
-	{
-		if (possibleState == state) return true;
-	}
-	return false;
-}
-
-bool FiniteAutomaton::VerifyAutomaton() const noexcept {
-	InitialToFinalRoute;
+	return true;
+	/*InitialToFinalRoute;
 	IsStateInPossibleStates(m_initialState);
 	for (const auto& finalState : m_finalStates)
-		IsStateInPossibleStates(finalState);
+		IsStateInPossibleStates(finalState);*/
 }
 
 std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)
@@ -134,6 +164,7 @@ std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)
 	for (const auto& element : automaton.m_alphabet)
 		out << element << " ";
 	out << "}\nInitial state: " << automaton.m_initialState;
+	out << "\nLambda: " << automaton.k_lambda;
 	out << "\nFunctions:\n";
 	for (const auto& functie : automaton.m_Functions)
 	{

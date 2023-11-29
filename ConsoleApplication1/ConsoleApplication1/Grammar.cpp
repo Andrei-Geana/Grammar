@@ -82,7 +82,7 @@ FiniteAutomaton Grammar::grammarToAutomaton() const noexcept
 	automaton.setAlphabet(m_Vt);
 	automaton.setInitialState(m_startCaracter);
 	automaton.setFinalStates(canGenerateLambda());
-
+	automaton.setLambda(k_lambda);
 	//TO BE DONE
 	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> transitionFunction;
 	std::vector<Productie> productii = m_productie;
@@ -152,8 +152,8 @@ bool Grammar::isRegular() const
 			continue;
 		}
 		//Case 2: A -> aB
-		if (std::find(m_Vt.begin(), m_Vt.begin(), productie.m_dreapta[0]) == m_Vt.end()) return false;
-		if (std::find(m_Vn.begin(), m_Vn.begin(), productie.m_dreapta[1]) == m_Vn.end()) return false;
+		if (std::find(m_Vt.begin(), m_Vt.end(), productie.m_dreapta[0]) == m_Vt.end()) return false;
+		if (std::find(m_Vn.begin(), m_Vn.end(), productie.m_dreapta[1]) == m_Vn.end()) return false;
 	}
 	return true;
 }
@@ -309,6 +309,7 @@ std::ostream& operator<<(std::ostream& out, const Grammar& gramatica)
 	for (const auto& element : gramatica.m_Vt)
 		out << element << " ";
 	out << "}\nCaracter start: " << gramatica.m_startCaracter;
+	out << "\nLambda: " << gramatica.k_lambda;
 	out << "\nProductii:\n";
 	for (const auto& productie : gramatica.m_productie)
 		out << productie.m_stanga << " -> " << productie.m_dreapta<< "\n";

@@ -22,17 +22,19 @@ public:
 
 	bool checkWord(const std::string&) const noexcept;
 	bool VerifyAutomaton() const noexcept;
+	bool IsDeterministic() const noexcept;
 
 	friend std::ostream& operator << (std::ostream&, const FiniteAutomaton&);
-	/*
-	bool VerifyAutomaton() const noexcept;
-	bool isDeterministic() const noexcept;
-	*/
+
 private:
+
 	bool checkValidWord(const char&, const std::string&) const noexcept;
 	bool wordHasValidCharacters(const std::string& word) const noexcept;
-	/*bool InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state) const noexcept;
-	bool IsStateInPossibleStates(const char& state) const noexcept;*/
+	bool InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state) const noexcept;
+	bool IsStateInPossibleStates(const char& state) const noexcept;
+	bool IsStateMadeWithAlphabet(const char& state) const noexcept;
+	bool CheckStatesExistence()const noexcept;
+	
 private:
 	static char k_lambda;
 

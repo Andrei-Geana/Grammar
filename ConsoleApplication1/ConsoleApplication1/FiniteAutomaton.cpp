@@ -112,47 +112,87 @@ bool FiniteAutomaton::checkValidWord(const char& currentState, const std::string
 	return false;
 }
 
-//bool FiniteAutomaton::InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state = '-') const noexcept
-//{
-//	if (state == '-')
-//	{
-//		state = m_initialState;
-//	}
-//	visitedStates.insert({ state,true });
-//	for (const auto& finalState : m_finalStates)
-//	{
-//		if (finalState == state) return true;
-//	}
-//	std::unordered_map<char, std::vector<char>> functie = m_Functions.at(state);
-//	for (const auto& dreapta : functie)
-//	{
-//		for (const auto& nextState : dreapta.second)
-//		{
-//			if (visitedStates[nextState] == false)
-//			{
-//				std::cout << "**";
-//				InitialToFinalRoute(visitedStates, nextState);
-//			}
-//		}
-//	}
-//	return false;
-//}
+bool FiniteAutomaton::InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state = '-') const noexcept
+{
+	if (state == '-')
+	{
+		state = m_initialState;
+	}
+	visitedStates[state] = true;
+	if (std::find(m_finalStates.begin(), m_finalStates.end(), state) != m_finalStates.end())
+	{
+		return true;
+	}
+	else {
+		std::unordered_map<char, std::vector<char>> functie = m_Functions.at(state);
+		for (const auto& dreapta : functie)
+		{
+			for (const auto& nextState : dreapta.second)
+			{
+				if (!visitedStates[nextState])
+				{
+				   if(InitialToFinalRoute(visitedStates, nextState))
+					   return true;
+				}
+			}
+		}
+	}
+	return false;
+}
 
-//bool FiniteAutomaton::IsStateInPossibleStates(const char& state) const noexcept {
-//	for (const auto& possibleState : m_possibleStates)
-//	{
-//		if (possibleState == state) return true;
-//	}
-//	return false;
-//}
+bool FiniteAutomaton::IsStateInPossibleStates(const char& state) const noexcept {
+	for (const auto& possibleState : m_possibleStates)
+	{
+		if (possibleState == state) return true;
+	}
+	return false;
+}
+
+bool FiniteAutomaton::IsStateMadeWithAlphabet(const char& state) const noexcept
+{
+	for (const auto& letter : m_alphabet)
+	{
+		if (letter == state) return false;
+	}
+	return true;
+}
+
+bool FiniteAutomaton::CheckStatesExistence() const noexcept
+{
+	return !m_finalStates.empty() && m_initialState !='\0';
+}
 
 bool FiniteAutomaton::VerifyAutomaton() const noexcept 
 {
-	return true;
-	/*InitialToFinalRoute;
-	IsStateInPossibleStates(m_initialState);
+	std::unordered_map<char, bool> visitedStates;
+	if(!InitialToFinalRoute(visitedStates))
+		return false;
+	if (!IsStateInPossibleStates(m_initialState))
+		return false;
 	for (const auto& finalState : m_finalStates)
-		IsStateInPossibleStates(finalState);*/
+	{
+		if (!IsStateInPossibleStates(finalState))
+			return false;
+		if (!IsStateMadeWithAlphabet(finalState))
+			return false;
+	}
+	if (!CheckStatesExistence())
+		return false;
+
+	return true;
+}
+
+bool FiniteAutomaton::IsDeterministic() const noexcept
+{
+	for (const auto& stateFunction : m_Functions)
+	{
+		std::unordered_map<char, std::vector<char>> possibleScenarios = stateFunction.second;
+		for (const auto& nextState : possibleScenarios)
+		{
+			if (nextState.second.size() > 1) return false;
+		}
+	}
+	return true;
 }
 
 std::ostream& operator<<(std::ostream& out, const FiniteAutomaton& automaton)

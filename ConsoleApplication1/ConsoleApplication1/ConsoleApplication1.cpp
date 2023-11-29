@@ -33,6 +33,16 @@ int main()
 	}
 	
 	FiniteAutomaton automaton = grammar.grammarToAutomaton();
+	if (!automaton.VerifyAutomaton())
+	{
+		std::cout << "Automaton is not valid.";
+			return 1;
+	}
+	if (automaton.IsDeterministic())
+	{
+		std::cout << "The automaton is deterministic.\n";
+	}
+	else std::cout << "The automaton is nondeterministic.\n";
 	int choice;
 	std::unordered_set<std::string> words;
 	do {

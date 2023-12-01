@@ -6,19 +6,20 @@ Grammar::Grammar(const std::vector<char>& Vn, const std::vector<char>& Vt, const
 {
 }
 
-void Grammar::printGrammar(std::ostream& os) const noexcept
+void Grammar::PrintGrammar(std::ostream& os) const noexcept
 {
+	os << "GRAMATICA:\n";
 	os << *this;
 }
 
-void Grammar::readGrammarFromFile(const std::string& nume_fisier)
+void Grammar::ReadGrammarFromFile(const std::string& nume_fisier)
 {
 	std::ifstream fin{ nume_fisier };
 	fin >> *this;
 	fin.close();
 }
 
-void Grammar::initializeVnAndVt(const std::string& sir_caractere, const bool& inVn)
+void Grammar::InitializeVnAndVt(const std::string& sir_caractere, const bool& inVn)
 {
 	if (inVn)
 		for (int index = 0; index < sir_caractere.size(); index += 2)
@@ -32,14 +33,14 @@ void Grammar::initializeVnAndVt(const std::string& sir_caractere, const bool& in
 		}
 }
 
-void Grammar::setStartCharacter(const char& caracterInceput)
+void Grammar::SetStartCharacter(const char& caracterInceput)
 {
 	m_startCaracter=caracterInceput;
 }
 
-std::string Grammar::generateWord() const
+std::string Grammar::GenerateWord() const
 {
-	if (!this->verifyGrammar())
+	if (!this->VerifyGrammar())
 		throw std::exception("ERROR: Not able to generate word. Grammar not valid.");
 	std::string sir_modificat;
 	sir_modificat.push_back(m_startCaracter);
@@ -54,15 +55,15 @@ std::string Grammar::generateWord() const
 		}
 		if (indiceProductiePosibila.empty())
 			break;
-		uint16_t indiceRandom = getIndiceRandom(indiceProductiePosibila.size()-1);
-		applyProduction(indiceProductiePosibila[indiceRandom], sir_modificat);
+		uint16_t indiceRandom = GetIndiceRandom(indiceProductiePosibila.size()-1);
+		ApplyProduction(indiceProductiePosibila[indiceRandom], sir_modificat);
 	} while (!indiceProductiePosibila.empty());
 	if (sir_modificat.length() == 0)
-		return "@";
+		return std::string{ k_lambda };
 	return sir_modificat;
 }
 
-bool Grammar::canGenerateLambda() const noexcept
+bool Grammar::CanGenerateLambda() const noexcept
 {
 	auto foundProduction = std::find_if(m_productie.begin(), m_productie.end(), [this](const Productie& productie) {
 		if (productie.m_stanga[0] == m_startCaracter)
@@ -75,15 +76,15 @@ bool Grammar::canGenerateLambda() const noexcept
 	return false;
 }
 
-FiniteAutomaton Grammar::grammarToAutomaton() const noexcept
+FiniteAutomaton Grammar::GrammarToAutomaton() const noexcept
 {
 	FiniteAutomaton automaton;
-	automaton.setPossibleStates(m_Vn);
-	automaton.setAlphabet(m_Vt);
-	automaton.setInitialState(m_startCaracter);
-	automaton.setFinalStates(canGenerateLambda());
-	automaton.setLambda(k_lambda);
-	//TO BE DONE
+	automaton.SetPossibleStates(m_Vn);
+	automaton.SetAlphabet(m_Vt);
+	automaton.SetInitialState(m_startCaracter);
+	automaton.SetFinalStates(CanGenerateLambda());
+	automaton.SetLambda(k_lambda);
+
 	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> transitionFunction;
 	std::vector<Productie> productii = m_productie;
 	for (const auto& productie : productii)
@@ -108,7 +109,7 @@ FiniteAutomaton Grammar::grammarToAutomaton() const noexcept
 				std::vector<char> emptyVector;
 				getPossibilities->emplace(firstCharacter, emptyVector);
 			}
-			getPossibilities->at(firstCharacter).emplace_back(automaton.getFinalStates()[0]);
+			getPossibilities->at(firstCharacter).emplace_back(automaton.GetFinalStates()[0]);
 		}
 		else
 		{
@@ -122,21 +123,21 @@ FiniteAutomaton Grammar::grammarToAutomaton() const noexcept
 			getPossibilities->at(firstCharacter).emplace_back(secondCharacter);
 		}
 	}
-	automaton.setFunctions(transitionFunction);
+	automaton.SetFunctions(transitionFunction);
 	return automaton;
 }
 
-bool Grammar::verifyGrammar() const
+bool Grammar::VerifyGrammar() const
 {
 	if (VnIsPartOfVt()) return false;
-	if (!startCaracterIsInVn()) return false;
-	if (!everyProductionHasOneVn()) return false;
-	if (!existsOneProductionWithStartCaracter()) return false;
-	if (!productionsContainOnlyVnAndVt()) return false;
+	if (!StartCaracterIsInVn()) return false;
+	if (!EveryProductionHasOneVn()) return false;
+	if (!ExistsOneProductionWithStartCaracter()) return false;
+	if (!ProductionsContainOnlyVnAndVt()) return false;
 	return true;
 }
 
-bool Grammar::isRegular() const
+bool Grammar::IsRegular() const
 {
 	for (const auto& productie : m_productie)
 	{
@@ -168,13 +169,13 @@ bool Grammar::VnIsPartOfVt() const
 	return false;
 }
 
-bool Grammar::startCaracterIsInVn() const
+bool Grammar::StartCaracterIsInVn() const
 {
 	return std::find(m_Vn.begin(), m_Vn.end(), m_startCaracter) != m_Vn.end();
 
 }
 
-bool Grammar::everyProductionHasOneVn() const
+bool Grammar::EveryProductionHasOneVn() const
 {
 	for (const auto& productie : m_productie)
 	{
@@ -193,7 +194,7 @@ bool Grammar::everyProductionHasOneVn() const
 	return true;
 }
 
-bool Grammar::existsOneProductionWithStartCaracter() const
+bool Grammar::ExistsOneProductionWithStartCaracter() const
 {
 	for (auto const& productie : m_productie)
 	{
@@ -205,7 +206,7 @@ bool Grammar::existsOneProductionWithStartCaracter() const
 	return false;
 }
 
-bool Grammar::productionsContainOnlyVnAndVt() const
+bool Grammar::ProductionsContainOnlyVnAndVt() const
 {
 	std::unordered_set<char> caractere;
 	caractere.emplace(k_lambda);
@@ -229,7 +230,7 @@ bool Grammar::productionsContainOnlyVnAndVt() const
 	return true;
 }
 
-uint16_t Grammar::getIndiceRandom(const uint16_t& maxim) const
+uint16_t Grammar::GetIndiceRandom(const uint16_t& maxim) const
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -237,14 +238,14 @@ uint16_t Grammar::getIndiceRandom(const uint16_t& maxim) const
 	return distrib(gen);
 }
 
-void Grammar::applyProduction(const uint16_t& index_productie, std::string& cuvant_modificat) const
+void Grammar::ApplyProduction(const uint16_t& index_productie, std::string& cuvant_modificat) const
 {
-	std::vector<uint16_t> indiciAparitii = getIndiciAparitii(index_productie, cuvant_modificat);
-	uint16_t indiceAparitieRandom = getIndiceRandom(indiciAparitii.size()-1);
-	replaceInString(index_productie, cuvant_modificat, indiciAparitii[indiceAparitieRandom]);
+	std::vector<uint16_t> indiciAparitii = GetIndiciAparitii(index_productie, cuvant_modificat);
+	uint16_t indiceAparitieRandom = GetIndiceRandom(indiciAparitii.size()-1);
+	ReplaceInString(index_productie, cuvant_modificat, indiciAparitii[indiceAparitieRandom]);
 }
 
-std::vector<uint16_t> Grammar::getIndiciAparitii(const uint16_t& index_productie, const std::string& cuvant_modificat) const
+std::vector<uint16_t> Grammar::GetIndiciAparitii(const uint16_t& index_productie, const std::string& cuvant_modificat) const
 {
 	std::vector<uint16_t> indiciAparitii;
 	const std::regex pattern(m_productie[index_productie].m_stanga);
@@ -258,9 +259,9 @@ std::vector<uint16_t> Grammar::getIndiciAparitii(const uint16_t& index_productie
 	return indiciAparitii;
 }
 
-void Grammar::replaceInString(const uint16_t& index_productie, std::string& cuvant_modificat, const uint16_t& indiceStart) const
+void Grammar::ReplaceInString(const uint16_t& index_productie, std::string& cuvant_modificat, const uint16_t& indiceStart) const
 {
-	//printProduction(index_productie, cuvant_modificat, indiceStart);
+	//PrintProduction(index_productie, cuvant_modificat, indiceStart);
 	if (m_productie[index_productie].m_dreapta[0] == k_lambda)
 	{
 		cuvant_modificat.replace(indiceStart,
@@ -273,7 +274,7 @@ void Grammar::replaceInString(const uint16_t& index_productie, std::string& cuva
 	}
 }
 
-void Grammar::printProduction(const uint16_t& index_productie, const std::string& cuvant_modificat, const uint16_t& indiceStart) const
+void Grammar::PrintProduction(const uint16_t& index_productie, const std::string& cuvant_modificat, const uint16_t& indiceStart) const
 {
 	std::cout << "CUVANT CURENT: " << cuvant_modificat << "\n";
 	std::cout << "LA INDEXUL " << indiceStart << " SE APLICA " << m_productie[index_productie].m_stanga << " -> " << m_productie[index_productie].m_dreapta <<"\n";
@@ -283,9 +284,9 @@ std::istream& operator>>(std::istream& in, Grammar& gramatica)
 {
 	std::string auxiliar;
 	std::getline(in, auxiliar);
-	gramatica.initializeVnAndVt(auxiliar, true);
+	gramatica.InitializeVnAndVt(auxiliar, true);
 	std::getline(in, auxiliar);
-	gramatica.initializeVnAndVt(auxiliar, false);
+	gramatica.InitializeVnAndVt(auxiliar, false);
 	std::getline(in, auxiliar);
 	gramatica.m_startCaracter = auxiliar[0];
 	{
@@ -301,7 +302,6 @@ std::istream& operator>>(std::istream& in, Grammar& gramatica)
 
 std::ostream& operator<<(std::ostream& out, const Grammar& gramatica)
 {
-	out << "GRAMATICA:\n";
 	out << "Vn = { ";
 	for (const auto& element : gramatica.m_Vn)
 		out << element << " ";
@@ -313,6 +313,5 @@ std::ostream& operator<<(std::ostream& out, const Grammar& gramatica)
 	out << "\nProductii:\n";
 	for (const auto& productie : gramatica.m_productie)
 		out << productie.m_stanga << " -> " << productie.m_dreapta<< "\n";
-	out << "\n";
 	return out;
 }

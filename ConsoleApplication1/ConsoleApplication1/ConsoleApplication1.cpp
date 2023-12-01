@@ -18,12 +18,12 @@ void displayMenu()
 int main()
 {
 	Grammar grammar;
-	grammar.readGrammarFromFile("intrare2.prodb");
+	grammar.ReadGrammarFromFile("intrare2.prodb");
 	try
 	{
-		if (!grammar.verifyGrammar())
+		if (!grammar.VerifyGrammar())
 			throw std::exception("ERROR: GRAMMAR IS NOT VALID!");
-		if(!grammar.isRegular())
+		if(!grammar.IsRegular())
 			throw std::exception("ERROR: GRAMMAR IS NOT REGULAR!");
 	}
 	catch (std::exception ex)
@@ -32,50 +32,60 @@ int main()
 		return 1;
 	}
 	
-	FiniteAutomaton automaton = grammar.grammarToAutomaton();
+	FiniteAutomaton automaton = grammar.GrammarToAutomaton();
 	if (!automaton.VerifyAutomaton())
 	{
 		std::cout << "Automaton is not valid.";
-			return 1;
+		return 1;
 	}
-	if (automaton.IsDeterministic())
-	{
-		std::cout << "The automaton is deterministic.\n";
-	}
-	else std::cout << "The automaton is nondeterministic.\n";
 	int choice;
+	std::string word;
+	uint16_t numberOfTries;
 	std::unordered_set<std::string> words;
 	do {
 		displayMenu();
-		std::cout << "Alege o optiune: ";
+		std::cout << "\nAlege o optiune : ";
 		std::cin >> choice;
-		std::string word;
+		std::cout << '\n';
 		switch (choice) {
 		case 1:
-			grammar.printGrammar(std::cout);
+			grammar.PrintGrammar(std::cout);
 			break;
 		case 2:
 			std::cout << "Introduceti valoarea lui n: ";
 			uint16_t n;
+			numberOfTries=0;
 			std::cin >> n;
 			while (words.size() < n)
-				words.emplace(grammar.generateWord());
+			{
+				words.emplace(grammar.GenerateWord());
+				if (++numberOfTries > n + 5)
+				{
+					break;
+				}
+			}
+			if (numberOfTries > n + 5)
+				std::cout << "GRAMATICA NU A PUTAT GENERA " << n << " CUVINTE, A GENERAT DOAR:\n";
 			for (const auto& word : words)
 				std::cout << word << "\n";
 			words.clear();
 			break;
 		case 3:
-			automaton.printAutomaton(std::cout);
+			automaton.PrintAutomaton(std::cout);
+			if (automaton.IsDeterministic())
+				std::cout << "\nThe automaton is deterministic.\n";
+			else
+				std::cout << "\nThe automaton is nondeterministic.\n";
 			break;
 		case 4:
 			std::cout << "Introduceti cuvantul dorit: ";
 			std::cin >> word;
-			std::cout << "ACCEPTAT: " << std::boolalpha << automaton.checkWord(word) << "\n";
+			std::cout << "ACCEPTAT: " << std::boolalpha << automaton.CheckWord(word) << "\n";
 			break;
 		case 5:
-			word = grammar.generateWord();
+			word = grammar.GenerateWord();
 			std::cout << "GENERAT: " << word << '\n';
-			std::cout << "ACCEPTAT: " << std::boolalpha << automaton.checkWord(word) << "\n";
+			std::cout << "ACCEPTAT: " << std::boolalpha << automaton.CheckWord(word) << "\n";
 			break;
 		case 0:
 			std::cout << "Ai ales sa iesi din meniu.\n";
@@ -84,6 +94,7 @@ int main()
 			std::cout << "Optiune invalida. Alege o optiune valida" << '\n';
 			break;
 		}
+		std::cout << '\n';
 	} while (choice != 0);
 	return 0;
 }

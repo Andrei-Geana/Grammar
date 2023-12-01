@@ -14,20 +14,20 @@ public:
 	Grammar(const std::vector<char>&, const std::vector<char>&, const char&, const std::vector<Productie>&);
 	Grammar() = default;
 
-	void printGrammar(std::ostream&) const noexcept;
-	void readGrammarFromFile(const std::string& nume_fisier);
+	void PrintGrammar(std::ostream&) const noexcept;
+	void ReadGrammarFromFile(const std::string& nume_fisier);
 
 	friend std::istream& operator>>(std::istream& in, Grammar&);
 	friend std::ostream& operator<<(std::ostream& out, const Grammar&);
 
-	void setStartCharacter(const char&);
-	std::string generateWord() const;
-	bool canGenerateLambda() const noexcept;
+	void SetStartCharacter(const char&);
+	std::string GenerateWord() const;
+	bool CanGenerateLambda() const noexcept;
 
-	FiniteAutomaton grammarToAutomaton() const noexcept;
+	FiniteAutomaton GrammarToAutomaton() const noexcept;
 
-	bool verifyGrammar() const;
-	bool isRegular() const;
+	bool VerifyGrammar() const;
+	bool IsRegular() const;
 
 private:
 	static const char k_lambda = '@';
@@ -38,17 +38,17 @@ private:
 	std::vector<Productie> m_productie;
 
 private:
-	void initializeVnAndVt(const std::string&, const bool&);
-	uint16_t getIndiceRandom(const uint16_t&) const;
-	void applyProduction(const uint16_t&, std::string&) const;
-	std::vector<uint16_t> getIndiciAparitii(const uint16_t&, const std::string&) const;
-	void replaceInString(const uint16_t&, std::string&, const uint16_t&) const;
-	void printProduction(const uint16_t&, const std::string&, const uint16_t&) const;
+	void InitializeVnAndVt(const std::string&, const bool&);
+	uint16_t GetIndiceRandom(const uint16_t&) const;
+	void ApplyProduction(const uint16_t&, std::string&) const;
+	std::vector<uint16_t> GetIndiciAparitii(const uint16_t&, const std::string&) const;
+	void ReplaceInString(const uint16_t&, std::string&, const uint16_t&) const;
+	void PrintProduction(const uint16_t&, const std::string&, const uint16_t&) const;
 
 	//Grammar valability check
 	bool VnIsPartOfVt() const;
-	bool startCaracterIsInVn() const;
-	bool everyProductionHasOneVn() const;
-	bool existsOneProductionWithStartCaracter() const;
-	bool productionsContainOnlyVnAndVt() const;
+	bool StartCaracterIsInVn() const;
+	bool EveryProductionHasOneVn() const;
+	bool ExistsOneProductionWithStartCaracter() const;
+	bool ProductionsContainOnlyVnAndVt() const;
 };

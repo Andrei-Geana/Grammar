@@ -8,19 +8,19 @@ public:
 	FiniteAutomaton() = default;
 
 
-	void setPossibleStates(const std::vector<char>&) noexcept;
-	void setAlphabet(const std::vector<char>&) noexcept;
-	void setInitialState(const char&) noexcept;
-	void setFinalStates(bool) noexcept;
-	void setFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
-	void setLambda(const char&) noexcept;
+	void SetPossibleStates(const std::vector<char>&) noexcept;
+	void SetAlphabet(const std::vector<char>&) noexcept;
+	void SetInitialState(const char&) noexcept;
+	void SetFinalStates(bool) noexcept;
+	void SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>&) noexcept;
+	void SetLambda(const char&) noexcept;
 
-	std::vector<char> getFinalStates() const noexcept;
-	char getInitialState() const noexcept;
+	std::vector<char> GetFinalStates() const noexcept;
+	char GetInitialState() const noexcept;
 
-	void printAutomaton(std::ostream&) const noexcept;
+	void PrintAutomaton(std::ostream&) const noexcept;
 
-	bool checkWord(const std::string&) const noexcept;
+	bool CheckWord(const std::string&) const noexcept;
 	bool VerifyAutomaton() const noexcept;
 	bool IsDeterministic() const noexcept;
 
@@ -28,8 +28,8 @@ public:
 
 private:
 
-	bool checkValidWord(const char&, const std::string&) const noexcept;
-	bool wordHasValidCharacters(const std::string& word) const noexcept;
+	bool CheckValidWord(const char&, const std::string&) const noexcept;
+	bool WordHasValidCharacters(const std::string& word) const noexcept;
 	bool InitialToFinalRoute(std::unordered_map<char, bool>& visitedStates, char state) const noexcept;
 	bool IsStateInPossibleStates(const char& state) const noexcept;
 	bool IsStateMadeWithAlphabet(const char& state) const noexcept;
@@ -46,7 +46,7 @@ private:
 
 	//A cu a se poate duce in A,B,C
 	//A cu b se poate duce in B, C
-	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> m_Functions;
+	std::unordered_map<char, std::unordered_map<char, std::vector<char>>> m_transitions;
 
 };
 

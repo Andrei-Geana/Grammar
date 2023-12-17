@@ -32,9 +32,9 @@ void FiniteAutomaton::SetInitialState(const char& character) noexcept
 
 void FiniteAutomaton::SetFinalStates(bool grammarContainsLambda=false) noexcept
 {
+	m_finalStates.emplace_back(m_possibleStates[m_possibleStates.size()-1]);
 	if (grammarContainsLambda)
 		m_finalStates.emplace_back(m_initialState);
-	m_finalStates.emplace_back(m_possibleStates[m_possibleStates.size()-1]);
 }
 
 void FiniteAutomaton::SetFunctions(const std::unordered_map<char, std::unordered_map<char, std::vector<char>>>& function) noexcept
